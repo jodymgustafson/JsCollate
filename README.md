@@ -1,7 +1,7 @@
 JsCollate
 =========
 
-Compresses and collates JavaScript files and updates the HTML file script tags.
+Compresses and collates JavaScript files and updates the HTML file script tags. It is a C# .Net command line app that can be included into your build process.
 
 It's relatively easy to compress and collate multiple JS files but that's only half the battle. You also need to update the script tags in your HTML file to point to the newly created file. You could do it by hand but that's not very efficient.
 
