@@ -1,0 +1,2 @@
+/* Unit Test */
+function Calc(){this.add=function(c,d){return c+d};this.sub=function(c,d){return c-d};this.mul=function(c,d){return c*d};this.div=function(c,d){return c/d}}document.addEventListener("onload",function(){var a=new Calc();var b=a.add(2,3)});
