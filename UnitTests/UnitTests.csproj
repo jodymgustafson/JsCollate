@@ -57,6 +57,7 @@
     <Content Include="webApp\app.html" />
     <Content Include="webApp\app.js" />
     <Content Include="webApp\calc.js" />
+    <Content Include="webApp\replaceApp.html" />
     <Content Include="webApp\test.js" />
   </ItemGroup>
   <ItemGroup>

@@ -51,7 +51,7 @@ namespace JsCollate
             {
                 // Write to dest file
                 var fileName = Path.Combine(destFolder, file.FileName);
-                Console.WriteLine("Writing: " + fileName);
+                Console.WriteLine("Writing collated file: " + fileName);
                 File.WriteAllText(fileName, GetComment(header) + Environment.NewLine + file.FileContents);
             }
         }

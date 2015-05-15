@@ -15,9 +15,14 @@ namespace JsCollate
         /// <returns></returns>
         public static IEnumerable<CollatedScript> Collate(string htmlFile, string destFolder)
         {
-            IEnumerable<FileToCollate> fileToCollate = HtmlScriptCollator.Collate(htmlFile, destFolder);
+            IEnumerable<FileToCollate> filesToCollate = HtmlScriptCollator.Collate(htmlFile, destFolder);
+            if (filesToCollate.Count() == 0)
+            {
+                filesToCollate = HtmlScriptReplacer.Replace(htmlFile, destFolder);
+            }
+
             string sourceDir = Path.GetDirectoryName(htmlFile);
-            IEnumerable<CollatedScript> destFiles = CollateFiles(fileToCollate, sourceDir);
+            IEnumerable<CollatedScript> destFiles = CollateFiles(filesToCollate, sourceDir);
             return destFiles;
         }
 
@@ -67,7 +72,7 @@ namespace JsCollate
             foreach (var sourceFile in sourceFilePaths)
             {
                 // Add it to the collated text
-                sb.Append(File.ReadAllText(sourceFile));
+                sb.AppendLine(File.ReadAllText(sourceFile));
             }
 
             return sb.ToString();

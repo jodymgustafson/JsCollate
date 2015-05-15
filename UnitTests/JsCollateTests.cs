@@ -50,5 +50,20 @@ namespace JsCollate
             Assert.IsTrue(testjs != null);
             Assert.IsFalse(testjs.FileContents.Contains("function Calc()"));
         }
+        
+        [Test] public void TestReplace()
+        {
+            var destFiles = ScriptCollator.Collate("../../webApp/replaceApp.html", "results");
+
+            Assert.AreEqual(2, destFiles.Count());
+            var appjs = destFiles.First(x => x.FileName == "app.js");
+            Assert.IsTrue(appjs != null);
+            Assert.IsTrue(appjs.FileContents.Contains("function Calc()"));
+            Assert.IsTrue(appjs.FileContents.Contains("document.addEventListener("));
+
+            var testjs = destFiles.First(x => x.FileName == "test.js");
+            Assert.IsTrue(testjs != null);
+            Assert.IsFalse(testjs.FileContents.Contains("function Calc()"));
+        }
     }
 }

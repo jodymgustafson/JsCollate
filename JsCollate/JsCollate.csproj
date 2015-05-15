@@ -50,6 +50,7 @@
     <Compile Include="CollatedScript.cs" />
     <Compile Include="FileToCollate.cs" />
     <Compile Include="HtmlScriptCollator.cs" />
+    <Compile Include="HtmlScriptReplacer.cs" />
     <Compile Include="JsCollator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
