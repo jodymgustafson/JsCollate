@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace JsCollate
 {
     class HtmlScriptReplacer
     {
         /// <summary>
-        /// Replaces script tags and writes the destination HTML file
+        /// Replaces script tags inside replace:with groupings and writes the destination HTML file
         /// </summary>
         /// <returns>A list of script files to collate</returns>
-        public static IEnumerable<FileToCollate> Replace(string htmlFile, string destFolder)
+        public static IEnumerable<FileToCollate> Replace(string htmlFile, string destFolder, bool addTiemstamp)
         {
             IEnumerable<FileToCollate> list;
 
@@ -25,7 +22,7 @@ namespace JsCollate
                 Console.WriteLine("Writing to: " + destHtmlFile);
                 using (var writer = new StreamWriter(destHtmlFile, false))
                 {
-                    list = ProcessScriptTags(reader, writer);
+                    list = ProcessScriptTags(reader, writer, addTiemstamp);
                 }
             }
 
@@ -33,13 +30,13 @@ namespace JsCollate
         }
 
         /// <summary>
-        /// Looks through the HTML file for script tags that have data-collate attribute, removes them and adds them
-        /// to the list of files to collate.
+        /// Looks through the HTML file for script tags that are inside a replace:with grouping,
+        /// removes them, and adds them to the list of files to collate.
         /// </summary>
         /// <param name="reader">The HTML source file</param>
         /// <param name="writer">The HTML destination file</param>
         /// <returns>List of script files to collate</returns>
-        private static IEnumerable<FileToCollate> ProcessScriptTags(StreamReader reader, StreamWriter writer)
+        private static IEnumerable<FileToCollate> ProcessScriptTags(StreamReader reader, StreamWriter writer, bool addTiemstamp)
         {
             List<FileToCollate> list = new List<FileToCollate>();
 
@@ -57,7 +54,8 @@ namespace JsCollate
                         DestFile = GetReplaceWith(line)
                     };
                     list.Add(ftc);
-                    writer.WriteLine(string.Format("<script src='{0}'></script>", ftc.DestFile));
+                    var ts = addTiemstamp ? "?v=" + DateTime.Now.Ticks : "";
+                    writer.WriteLine(string.Format("<script src='{0}{1}'></script>", ftc.DestFile, ts));
                     continue;
                 }
 
@@ -71,13 +69,14 @@ namespace JsCollate
                     if (IsEndReplace(line))
                     {
                         isInReplace = false;
-                        continue;
                     }
-
-                    var sourceFile = GetSourceFile(line);
-                    ((List<string>)ftc.SourceFiles).Add(sourceFile);
-
-                    Console.WriteLine("Removing script: " + line.Trim());
+                    else
+                    {
+                        // Add script to the list of files to replace
+                        var sourceFile = GetSourceFile(line);
+                        ((List<string>)ftc.SourceFiles).Add(sourceFile);
+                        Console.WriteLine("Removing script: " + line.Trim());
+                    }
                 }
             }
 

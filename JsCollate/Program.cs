@@ -7,6 +7,7 @@ namespace JsCollate
     /// JsCollate collates JavaScript files referenced in an HTML file into one or more files,
     /// compresses the JavaScript code,
     /// then updates the script tags in the HTML file to the output file(s).
+    /// Adds a timestamp parameter to the script tag to bust the cache.
     /// 
     /// Specify the file to collate to by adding a data-collate parameter to your script elements.
     /// The following would collate the two files to app.js.
@@ -17,12 +18,13 @@ namespace JsCollate
     /// &lt;script src="app.js" data-collate="app.js"&gt;&lt;/script&gt;
     /// </example>
     /// 
-    /// Usage: JsCollate source dest [/header:text] [/-c]
+    /// Usage: JsCollate source dest [/header:text] [/-c] [/-ts]
     /// Command line params:
     /// source - The HTML file that contains script tags to collate
     /// dest - The folder to put the updated HTML and JavaScript files in
     /// /header:text - (optional) Places the specified text at the beginning of the output JavaScript file as a comment
     /// /-c - (optional) Do not compress the JavaScript
+    /// /-ts - (optional) Don't add timestamp to script reference
     /// 
     /// The following example collates the JavaScript files referenced in app.html to the release folder.
     /// <example>JsCollate app.html release /header:"My App version 1.0"</example>
@@ -41,6 +43,7 @@ namespace JsCollate
             string destFolder = args[1];
             string header = "";
             bool compress = true;
+            bool addTimestamp = true;
 
             for (var i = 2; i < args.Length; i++)
             {
@@ -53,13 +56,17 @@ namespace JsCollate
                 {
                     compress = false;
                 }
+                else if (arg.ToLower() == "/-ts")
+                {
+                    addTimestamp = false;
+                }
                 else
                 {
                     throw new ApplicationException("Invalid argument: " + arg);
                 }
             }
 
-            JsCollator.Collate(sourceHtml, destFolder, header, compress);
+            JsCollator.Collate(sourceHtml, destFolder, header, compress, addTimestamp);
         }
 
         private static void ShowHelp()
@@ -70,6 +77,7 @@ namespace JsCollate
             Console.WriteLine("dest         : Destination folder");
             Console.WriteLine("/header:text : Text that will be inserted at the beginning of the collated script file");
             Console.WriteLine("/-c          : Don't compress JavaScript");
+            Console.WriteLine("/-ts         : Don't add timestamp to script reference");
         }
     }
 }

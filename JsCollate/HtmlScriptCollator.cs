@@ -9,7 +9,7 @@ namespace JsCollate
     class HtmlScriptCollator
     {
         /// <summary>
-        /// Collates script tags and writes the destination HTML file
+        /// Collates script tags that have a data-collate attribute and writes the destination HTML file
         /// </summary>
         /// <returns>A list of script files to collate</returns>
         public static IEnumerable<FileToCollate> Collate(string htmlFile, string destFolder)

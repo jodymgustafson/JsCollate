@@ -13,12 +13,14 @@ namespace JsCollate
         /// <param name="htmlFile"></param>
         /// <param name="destFolder"></param>
         /// <returns></returns>
-        public static IEnumerable<CollatedScript> Collate(string htmlFile, string destFolder)
+        public static IEnumerable<CollatedScript> Collate(string htmlFile, string destFolder, bool addTiemstamp)
         {
+            // check if they're using the older data-collate attribute
             IEnumerable<FileToCollate> filesToCollate = HtmlScriptCollator.Collate(htmlFile, destFolder);
             if (filesToCollate.Count() == 0)
             {
-                filesToCollate = HtmlScriptReplacer.Replace(htmlFile, destFolder);
+                // they must be using replace:with grouping
+                filesToCollate = HtmlScriptReplacer.Replace(htmlFile, destFolder, addTiemstamp);
             }
 
             string sourceDir = Path.GetDirectoryName(htmlFile);

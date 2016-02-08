@@ -13,9 +13,9 @@ namespace JsCollate
         /// <param name="destFolder"></param>
         /// <param name="header"></param>
         /// <param name="compress"></param>
-        public static void Collate(string htmlFile, string destFolder, string header, bool compress)
+        public static void Collate(string htmlFile, string destFolder, string header, bool compress, bool addTimestamp)
         {
-            var destFiles = ScriptCollator.Collate(htmlFile, destFolder);
+            var destFiles = ScriptCollator.Collate(htmlFile, destFolder, addTimestamp);
 
             if (compress)
             {
